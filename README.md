@@ -1,6 +1,6 @@
 # ai77ee personal site
 
-Hi, this is my personal website in the internet. is built with astro.
+Hi, this is my personal website in the internet built with astro.
 
 ## 🧞 Commands
 
