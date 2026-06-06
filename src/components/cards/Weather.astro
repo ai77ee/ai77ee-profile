@@ -1,0 +1,124 @@
+---
+
+---
+
+<span id='weather-widget' class='weather-widget' aria-label='weather'>
+  <span class='weather-loading'>syncing...</span>
+</span>
+
+<script>
+  // ── WMO Weather codes ──────────────────────────────────────────
+  const WMO: Record<number, { day: string; night: string; icon: string }> = {
+    0: { day: 'clear sky', night: 'clear sky', icon: '○' },
+    1: { day: 'mostly clear', night: 'mostly clear', icon: '◑' },
+    2: { day: 'partly cloudy', night: 'partly cloudy', icon: '◑' },
+    3: { day: 'overcast', night: 'overcast', icon: '●' },
+    45: { day: 'fog', night: 'fog', icon: '≋' },
+    48: { day: 'icy fog', night: 'icy fog', icon: '≋' },
+    51: { day: 'light drizzle', night: 'light drizzle', icon: '·' },
+    53: { day: 'drizzle', night: 'drizzle', icon: '·' },
+    55: { day: 'heavy drizzle', night: 'heavy drizzle', icon: '·' },
+    61: { day: 'light rain', night: 'light rain', icon: '▽' },
+    63: { day: 'rain', night: 'rain', icon: '▽' },
+    65: { day: 'heavy rain', night: 'heavy rain', icon: '▽' },
+    71: { day: 'light snow', night: 'light snow', icon: '❄' },
+    73: { day: 'snow', night: 'snow', icon: '❄' },
+    75: { day: 'heavy snow', night: 'heavy snow', icon: '❄' },
+    77: { day: 'snow grains', night: 'snow grains', icon: '❄' },
+    80: { day: 'rain showers', night: 'rain showers', icon: '▽' },
+    81: { day: 'rain showers', night: 'rain showers', icon: '▽' },
+    82: { day: 'heavy showers', night: 'heavy showers', icon: '▽' },
+    85: { day: 'snow showers', night: 'snow showers', icon: '❄' },
+    86: { day: 'heavy snow showers', night: 'heavy snow showers', icon: '❄' },
+    95: { day: 'thunderstorm', night: 'thunderstorm', icon: '↯' },
+    96: { day: 'thunderstorm', night: 'thunderstorm', icon: '↯' },
+    99: { day: 'thunderstorm', night: 'thunderstorm', icon: '↯' },
+  };
+
+  const DAY_ICON = '☀';
+  const NIGHT_ICON = '☾';
+
+  async function fetchWeather() {
+    const widget = document.getElementById('weather-widget');
+    if (!widget) return;
+
+    try {
+      const res = await fetch(
+        'https://api.open-meteo.com/v1/forecast?latitude=16.4309&longitude=-96.5494&current=temperature_2m,is_day,weather_code&timezone=auto',
+      );
+      const data = await res.json();
+      const { temperature_2m, is_day, weather_code } = data.current;
+
+      const wmo = WMO[weather_code] ?? {
+        day: 'unknown',
+        night: 'unknown',
+        icon: '?',
+      };
+      const desc = is_day ? wmo.day : wmo.night;
+      const timeIcon = is_day ? DAY_ICON : NIGHT_ICON;
+      const dayNight = is_day ? 'day' : 'night';
+
+      widget.innerHTML = `
+        <span class="weather-icon">「${timeIcon} ${dayNight}」</span>
+         <span class='weather-sep'>·</span>
+        <span class="weather-temp">「${Math.round(temperature_2m)}°C</span>
+        <span class='weather-sep'>/</span>
+        <span class="weather-desc">${desc}</span>
+        <span class="weather-temp-icon">${wmo.icon}」</span>
+      `;
+    } catch {
+      widget.innerHTML = `<span class="weather-error">err: no signal</span>`;
+    }
+  }
+
+  fetchWeather();
+</script>
+
+<style>
+  :global(.weather-widget) {
+    display: inline-flex; /* un solo flex item hacia header-stats */
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+  }
+
+  :global(.weather-icon) {
+    color: var(--amber);
+  }
+  :global(.weather-temp) {
+    color: var(--amber);
+  }
+  :global(.weather-temp-icon) {
+    color: var(--amber);
+  }
+  :global(.weather-sep) {
+    .sep {
+      color: var(--amber-dim);
+    }
+  }
+  :global(.weather-desc) {
+    color: var(--amber);
+  }
+  :global(.weather-wmo) {
+    color: var(--amber-dim);
+    font-size: 0.55rem;
+  }
+  :global(.weather-error) {
+    color: var(--amber-dark);
+  }
+  .weather-loading {
+    color: var(--amber-dark);
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+</style>

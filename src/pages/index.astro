@@ -1,17 +1,14 @@
 ---
-
+import Welcome from '../layouts/Welcome.astro';
+import '../styles/global.css';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<div class='scanlines'>
+  <div class='jpg'></div>
+</div>
+<Welcome title='welcome page'>
+  <div class='top-spacer'></div>
+  <div class='main-container'>
+    <h1><a href='/home'> &lt;&lt;enter to a new world&gt;&gt; </a></h1>
+  </div>
+</Welcome>

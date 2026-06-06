@@ -1,0 +1,145 @@
+---
+const CD_SVG = `data:image/svg+xml,${encodeURIComponent(`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="#ff8c00"><path d="M41.6593,34.5882 C40.4893,38.9542 36.5203,42.0032 32.0073,42.0032 C31.1363,42.0032 30.2633,41.8872 29.4123,41.6592 C24.0853,40.2322 20.9133,34.7382 22.3403,29.4122 C23.5103,25.0462 27.4793,21.9972 31.9933,21.9972 C32.8643,21.9972 33.7373,22.1122 34.5883,22.3412 C39.9143,23.7682 43.0863,29.2622 41.6593,34.5882 M56.6073,17.7502 C56.4683,17.5112 56.1623,17.4282 55.9243,17.5672 L42.1023,25.5482 C41.1753,24.0962 39.9463,22.8352 38.4593,21.8862 L46.4333,8.0762 C46.5713,7.8372 46.4893,7.5312 46.2503,7.3932 C46.0113,7.2542 45.7053,7.3372 45.5673,7.5762 L37.5913,21.3902 C36.8153,20.9822 35.9883,20.6452 35.1063,20.4092 C34.0653,20.1302 33.0203,19.9972 31.9923,19.9972 C26.6943,19.9972 21.8453,23.5332 20.4093,28.8942 C19.5943,31.9342 20.0353,35.0082 21.3953,37.5882 L7.5763,45.5672 C7.3373,45.7052 7.2553,46.0112 7.3933,46.2502 C7.4863,46.4102 7.6543,46.5002 7.8263,46.5002 C7.9113,46.5002 7.9973,46.4782 8.0763,46.4322 L21.8983,38.4522 C22.8243,39.9032 24.0533,41.1642 25.5403,42.1132 L17.5673,55.9242 C17.4283,56.1632 17.5103,56.4692 17.7503,56.6062 C17.8283,56.6522 17.9143,56.6742 17.9993,56.6742 C18.1723,56.6742 18.3403,56.5842 18.4333,56.4242 L26.4083,42.6102 C27.1843,43.0182 28.0113,43.3542 28.8943,43.5912 C29.9343,43.8702 30.9793,44.0032 32.0073,44.0032 C37.3053,44.0032 42.1543,40.4672 43.5913,35.1062 C44.4053,32.0662 43.9653,28.9922 42.6043,26.4112 L56.4243,18.4322 C56.6633,18.2952 56.7453,17.9892 56.6073,17.7502 M32.0003,62.0002 C15.4583,62.0002 2.0003,48.5422 2.0003,32.0002 C2.0003,15.4582 15.4583,2.0002 32.0003,2.0002 C48.5423,2.0002 62.0003,15.4582 62.0003,32.0002 C62.0003,48.5422 48.5423,62.0002 32.0003,62.0002 M32.0003,0.0002 C14.3273,0.0002 0.0003,14.3272 0.0003,32.0002 C0.0003,49.6732 14.3273,64.0002 32.0003,64.0002 C49.6733,64.0002 64.0003,49.6732 64.0003,32.0002 C64.0003,14.3272 49.6733,0.0002 32.0003,0.0002"/></svg>`)}`;
+---
+
+<div id='song-widget' class='profile-card playing' data-label='LAST PLAYED'>
+  <div class='song-info'>
+    <img
+      id='song-cover'
+      src={CD_SVG}
+      alt='Album cover'
+      width='100'
+      height='100'
+    />
+    <div class='song-text'>
+      <a id='song-title-url' href='#' target='_blank' rel='noopener noreferrer'
+        ><p id='song-title'>Loading...</p></a
+      >
+      <p id='song-artist'></p>
+    </div>
+  </div>
+  <div class='listening-status'>
+    <span id='song-status-dot'></span>
+    <span id='song-status'></span>
+  </div>
+</div>
+
+<script>
+  function formatLastPlayed(timestamp: number): string {
+    // from https://dev.to/natclark/calculating-relative-time-in-javascript-94p
+    const date = new Date();
+    const todayDate = date.getTime();
+    const seconds = Math.floor(todayDate / 1000);
+
+    const difference = seconds - timestamp;
+
+    let output = ``;
+    if (difference < 60) {
+      // Less than a minute has passed:
+      output = `${difference} seconds ago`;
+    } else if (difference < 3600) {
+      // Less than an hour has passed:
+      output = `${Math.floor(difference / 60)} minutes ago`;
+    } else if (difference < 86400) {
+      // Less than a day has passed:
+      output = `${Math.floor(difference / 3600)} hours ago`;
+    } else if (difference < 2620800) {
+      // Less than a month has passed:
+      output = `${Math.floor(difference / 86400)} days ago`;
+    } else if (difference < 31449600) {
+      // Less than a year has passed:
+      output = `${Math.floor(difference / 2620800)} months ago`;
+    } else {
+      // More than a year has passed:
+      output = `${Math.floor(difference / 31449600)} years ago`;
+    }
+    return output;
+  }
+
+  const formatTime = (timestamp: number, timezone?: string) => {
+    const date = new Date(timestamp * 1000);
+    const diff = Math.floor(Date.now() / 1000) - timestamp;
+    const currentTimestamp = Date.now(); // Today
+
+    if (diff < 86400) {
+      // less than 24h, show time only  <p class='p-right'>『what am i listening to?』</p>
+      return date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZone: timezone,
+      });
+    }
+
+    // more than 24h, show date and time
+    return date.toLocaleDateString('en-US', {
+      weekday: diff < 86400 * 7 ? 'long' : undefined, // this week: day of the week, otherwise: date
+      day: diff >= 86400 * 7 ? 'numeric' : undefined, // more than a week → date
+      month: diff >= 86400 * 7 ? 'short' : undefined, // more than a week → month
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: timezone,
+    });
+  };
+
+  const fetchAndUpdate = async () => {
+    const res = await fetch('https://song-status.ai77ee.xyz/', {
+      cache: 'no-store',
+    });
+    const data = await res.json();
+    const dot = document.getElementById('song-status-dot')!;
+
+    const coverImg = document.getElementById('song-cover') as HTMLImageElement;
+    coverImg!.src = data.image || coverImg!.src;
+    (document.getElementById('song-title-url') as HTMLAnchorElement)!.href =
+      data.song_url || '#';
+    document.getElementById('song-title')!.textContent = `「${data.song}」`;
+    document.getElementById('song-artist')!.textContent = data.artist;
+    //document.getElementById('song-status')!.textContent = data.listening
+    //  ? 'currently listening'「」
+    // : getRelativeTime(data.timestamp);
+    console.log(data.timestamp);
+    if (!data.listening) {
+      dot.className = 'dot--inactive';
+      const Time = formatLastPlayed(data.timestamp); // hora
+
+      document.getElementById('song-status')!.textContent = `${Time}`;
+    } else {
+      dot.className = 'dot--active';
+      document.getElementById('song-status')!.textContent = 'now listening';
+    }
+  };
+
+  fetchAndUpdate();
+  setInterval(fetchAndUpdate, 10000);
+</script>
+<style>
+  @media (max-width: 600px) {
+    .song-info {
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    .song-text {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 4px; /* reduce el gap */
+    }
+    #song-cover {
+      width: 32px;
+      height: auto;
+    }
+    #song-status-dot {
+      font-size: 0.7rem;
+    }
+    #song-status {
+      font-size: 0.7rem;
+    }
+    #song-title,
+    #song-artist {
+      width: auto;
+      max-width: 150px;
+    }
+  }
+</style>

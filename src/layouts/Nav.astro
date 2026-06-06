@@ -1,0 +1,17 @@
+---
+import Weather from '../components/cards/Weather.astro';
+import Presence from '../components/cards/Presence.astro';
+import Time from '../components/cards/Time.astro';
+---
+
+<div class='profile-card profile-header-card'>
+  <span class='dim'>> init profile...</span>
+  <h2 class='typing'>ai77ee</h2>
+  <div class='header-stats'>
+    <Weather />
+    <span class='sep'>·</span>
+    <span><Presence /></span>
+    <span class='sep'>·</span>
+    <span><Time /></span>
+  </div>
+</div>

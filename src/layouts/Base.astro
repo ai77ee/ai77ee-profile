@@ -1,0 +1,139 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { Font } from 'astro:assets';
+import '../styles/index.css';
+import Nav from './Nav.astro';
+
+import Playing from '../components/cards/Playing.astro';
+import AboutMe from '../components/cards/AboutMe.astro';
+import Mood from '../components/cards/Mood.astro';
+import Status from '../components/cards/Status.astro';
+import SideNav from '../components/cards/SideNav.astro';
+
+import ThemeSwitch from '../components/ThemeSwitch.astro';
+
+interface Props {
+  title?: string;
+}
+
+const { title = 'ai77ee' } = Astro.props;
+---
+
+<!doctype html>
+<html lang='en'>
+  <head>
+    <!-- tema -->
+    <script is:inline>
+      const theme = localStorage.getItem('theme') || 'amber';
+      document.documentElement.setAttribute('data-theme', theme);
+    </script>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <meta name='description' content='a simple profile website' />
+    <title>{title}</title>
+    <link
+      rel='apple-touch-icon'
+      sizes='180x180'
+      href='favicon/apple-touch-icon.png'
+    />
+    <link
+      rel='icon'
+      type='image/png'
+      sizes='32x32'
+      href='favicon/favicon-32x32.png'
+    />
+    <link
+      rel='icon'
+      type='image/png'
+      sizes='16x16'
+      href='favicon/favicon-16x16.png'
+    />
+
+    <Font cssVariable='--font-jersey-25' preload />
+    <Font cssVariable='--font-share-tech-mono' preload />
+    <Font cssVariable={'--font-tranquility' as any} />
+    <ClientRouter />
+
+    <script
+      defer
+      src='https://cloud.umami.is/script.js'
+      data-website-id='0c466754-c443-47b0-9d18-7e947dec24ca'></script>
+  </head>
+  <body>
+    <div class='profile-grid'>
+      <div class='profile-header' transition:persist>
+        <Nav />
+      </div>
+
+      <aside class='profile-left' transition:persist>
+        <div class='left-fixed'>
+          <SideNav />
+          <AboutMe />
+          <Playing />
+        </div>
+        <button class='left-toggle'>
+          <span>▸ more info</span>
+          <span class='toggle-icon'>[+]</span>
+        </button>
+        <div class='left-extra'>
+          <Mood />
+          <Status />
+          <footer class='left-footer'>
+            <span class='left-footer-text'
+              >made with <span class='heart'>♥</span> by ai77ee</span
+            >
+            <span class='left-footer-sub'>built with astro</span>
+          </footer>
+        </div>
+        <div class='scroll-indicator' id='scroll-indicator'>
+          <span class='scroll-arrow'>↓↓↓</span>
+        </div>
+      </aside>
+      <main class='profile-main'>
+        <ThemeSwitch />
+        <slot />
+      </main>
+      <script is:inline>
+        // desaparece al hacer scroll
+        const indicator = document.getElementById('scroll-indicator');
+
+        window.addEventListener(
+          'scroll',
+          () => {
+            if (!indicator) return;
+            if (window.scrollY > 60) {
+              indicator.style.opacity = '0';
+              indicator.style.pointerEvents = 'none';
+            } else {
+              indicator.style.opacity = '1';
+              indicator.style.pointerEvents = 'auto';
+            }
+          },
+          { passive: true },
+        );
+
+        function initLeftToggle() {
+          const toggle = document.querySelector('.left-toggle');
+          const extra = document.querySelector('.left-extra');
+
+          if (!toggle || !extra) return;
+
+          // clonar el botón para limpiar listeners anteriores
+          const newToggle = toggle.cloneNode(true);
+          toggle.replaceWith(newToggle);
+
+          newToggle.addEventListener('click', () => {
+            extra.classList.toggle('open');
+            const icon = newToggle.querySelector('.toggle-icon');
+            if (icon) {
+              icon.textContent = extra.classList.contains('open')
+                ? '[-]'
+                : '[+]';
+            }
+          });
+        }
+        document.addEventListener('astro:page-load', initLeftToggle);
+      </script>
+    </div>
+  </body>
+</html>

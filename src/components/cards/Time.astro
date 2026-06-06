@@ -1,0 +1,44 @@
+---
+
+---
+
+<span id='time-widget' class='time-widget' aria-label='time'>
+  <span class='time-loading'>syncing...</span>
+</span>
+
+<script>
+  function updateTime() {
+    const widget = document.getElementById('time-widget');
+    if (!widget) return;
+
+    const localTime = new Date().toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'America/Mexico_City',
+      timeZoneName: 'short',
+    });
+
+    const visitorTime = new Date().toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZoneName: 'short',
+    });
+
+    const timeString =
+      localTime === visitorTime
+        ? `${localTime}`
+        : `${localTime} · visitor: ${visitorTime}`;
+
+    widget.textContent = `「${timeString}」`;
+  }
+
+  updateTime();
+</script>
+<style>
+  .time-widget {
+    color: var(--amber);
+    font-size: 0.75rem;
+  }
+</style>

@@ -1,0 +1,346 @@
+---
+interface Song {
+  title: string;
+  artist: string;
+  youtubeId: string;
+  image: string;
+}
+
+interface Props {
+  songs: Song[];
+}
+
+const { songs } = Astro.props;
+---
+
+<div class='profile-card fav-songs' data-label='FAVORITE SONGS THIS MONTH'>
+  <!-- player flotante -->
+  <div class='floating-player' id='floating-player' aria-hidden='true'>
+    <div class='floating-player-header'>
+      <div class='floating-player-info'>
+        <span id='fp-title'>---</span>
+        <span id='fp-artist'></span>
+      </div>
+      <button class='floating-player-close' id='fp-close'>✕</button>
+    </div>
+    <div class='floating-player-embed'>
+      <iframe
+        id='fp-iframe'
+        src=''
+        allow='autoplay; encrypted-media'
+        allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- grid de canciones -->
+  <div class='songs-grid' id='songs-grid'>
+    {
+      songs.map((song, i) => (
+        <button
+          class='song-item'
+          data-index={i}
+          data-youtube={song.youtubeId}
+          data-title={song.title}
+          data-artist={song.artist}
+          aria-label={`Play ${song.title} by ${song.artist}`}
+        >
+          <div class='song-thumb'>
+            <img
+              src={song.image}
+              alt={`${song.title} — ${song.artist}`}
+              loading='lazy'
+            />
+            <div class='song-thumb-overlay'>
+              <span class='song-play-icon'>▶</span>
+            </div>
+          </div>
+          <span class='song-label'>{song.title}</span>
+          <span class='song-artist-label'>{song.artist}</span>
+        </button>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  function initFavSongs() {
+    const player = document.getElementById('floating-player');
+    const iframe = document.getElementById('fp-iframe') as HTMLIFrameElement;
+    const fpTitle = document.getElementById('fp-title');
+    const fpArtist = document.getElementById('fp-artist');
+    const closeBtn = document.getElementById('fp-close');
+    const grid = document.getElementById('songs-grid');
+
+    if (!player || !iframe || !closeBtn || !grid) return;
+
+    let activeIndex: number | null = null;
+
+    // abre el player al hacer click en una canción
+    grid.querySelectorAll('.song-item').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const youtubeId = btn.getAttribute('data-youtube');
+        const title = btn.getAttribute('data-title');
+        const artist = btn.getAttribute('data-artist');
+        const index = Number(btn.getAttribute('data-index'));
+
+        if (!youtubeId) return;
+
+        // si hace click en la canción activa, cierra el player
+        if (activeIndex === index) {
+          closePlayer();
+          return;
+        }
+
+        activeIndex = index;
+
+        // actualiza info
+        if (fpTitle) fpTitle.textContent = title || '---';
+        if (fpArtist) fpArtist.textContent = artist || '';
+
+        // carga el video — autoplay=1 para que empiece solo
+        iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
+
+        // marca el item activo
+        grid
+          .querySelectorAll('.song-item')
+          .forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // muestra el player
+        player.classList.add('open');
+        player.setAttribute('aria-hidden', 'false');
+      });
+    });
+
+    // cierra el player
+    function closePlayer() {
+      if (!player || !iframe || !grid) return;
+      player.classList.remove('open');
+      player.setAttribute('aria-hidden', 'true');
+      iframe.src = ''; // detiene el video
+      activeIndex = null;
+      grid
+        .querySelectorAll('.song-item')
+        .forEach((b) => b.classList.remove('active'));
+    }
+
+    closeBtn.addEventListener('click', closePlayer);
+  }
+
+  initFavSongs();
+  document.addEventListener('astro:page-load', initFavSongs);
+</script>
+
+<style>
+  .fav-songs {
+    position: relative;
+  }
+
+  /* ── floating player ── */
+  .floating-player {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--amber-dim);
+    background: var(--bg);
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .floating-player.open {
+    display: flex;
+  }
+
+  .floating-player-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--amber-dim);
+    background: var(--amber-faint);
+    gap: 8px;
+  }
+
+  .floating-player-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    gap: 5px;
+    overflow: hidden;
+  }
+
+  #fp-title {
+    font-size: 0.72rem;
+    font-style: italic;
+    color: var(--amber);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.05em;
+  }
+
+  #fp-artist {
+    font-size: 0.72rem;
+    font-style: italic;
+    color: var(--amber-dim);
+    letter-spacing: 0.05em;
+  }
+
+  .floating-player-close {
+    background: none;
+    border: 1px solid var(--amber-dim);
+    color: var(--amber-dim);
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    cursor: pointer;
+    font-family: var(--font-share-tech-mono), monospace;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .floating-player-close:hover {
+    color: var(--amber);
+    border-color: var(--amber);
+  }
+
+  .floating-player-embed {
+    position: relative;
+    width: 100%;
+    aspect-ratio: auto;
+  }
+
+  .floating-player-embed iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  /* ── songs grid ── */
+  .songs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .song-item {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .song-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 1px solid var(--amber-dim);
+  }
+
+  .song-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+
+    transition: filter 0.2s;
+  }
+
+  .song-thumb-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .song-play-icon {
+    color: var(--amber);
+    font-size: 1.4rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+    text-shadow: 0 0 8px rgba(87, 87, 87, 0.8);
+  }
+
+  /* hover */
+  .song-item:hover .song-thumb-overlay {
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .song-item:hover .song-play-icon {
+    opacity: 1;
+  }
+
+  /* activo */
+  .song-item.active .song-thumb {
+    border-color: var(--amber);
+    box-shadow: 0 0 8px rgba(156, 156, 156, 0.4);
+  }
+
+  .song-item.active .song-thumb img {
+    filter: opacity(0.7);
+  }
+
+  .song-item.active .song-play-icon {
+    opacity: 1;
+  }
+
+  .song-item.active .song-thumb-overlay {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  .song-label,
+  .song-artist-label {
+    font-family: var(--font-share-tech-mono), monospace;
+  }
+  .song-label {
+    font-size: 0.65rem;
+    color: var(--amber);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.05em;
+  }
+
+  .song-artist-label {
+    font-size: 0.58rem;
+    color: var(--amber-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ── responsive ── */
+  @media (max-width: 768px) {
+    .songs-grid {
+      gap: 6px;
+    }
+
+    .song-label,
+    .song-artist-label {
+      font-size: 0.6rem;
+    }
+
+    /* el player ocupa todo el ancho */
+    .floating-player {
+      margin-bottom: 10px;
+    }
+
+    /* en móvil el overlay siempre visible para indicar que es clickeable */
+    .song-thumb-overlay {
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .song-play-icon {
+      opacity: 0.5;
+      font-size: 1.2rem;
+    }
+  }
+</style>

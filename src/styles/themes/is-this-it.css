@@ -1,0 +1,262 @@
+/* ═══════════════════════════════════════════
+   THEME: IS THIS IT — The Strokes (2001)
+   Paleta: crema, charcoal, terracota
+   Tipografía: serif + monospace, minimal
+   ═══════════════════════════════════════════ */
+
+html[data-theme="isthisit"] {
+    --amber: #b5452a;
+    /* terracota — color del logo */
+    --amber-dim: #8a7a6a;
+    /* gris cálido muted */
+    --amber-bright: #c4553a;
+    /* terracota claro */
+    --amber-dark: #6a5a4a;
+    --amber-glow: rgba(181, 69, 42, 0.1);
+    --amber-faint: rgba(181, 69, 42, 0.04);
+    --bg: #f0ebe0;
+    /* crema papel fotográfico */
+
+    /* colores extra */
+    --iti-cream: #f0ebe0;
+    --iti-card: #e8e3d8;
+    --iti-border: #c8bfb0;
+    --iti-text: #2a2520;
+    /* charcoal oscuro */
+    --iti-dim: #8a7a6a;
+    --iti-terra: #b5452a;
+    /* terracota */
+}
+
+/* ── body ── */
+html[data-theme="isthisit"] body {
+    background-color: var(--iti-cream);
+    background-image: none;
+    color: var(--iti-text);
+}
+
+/* grano fotográfico sutil */
+html[data-theme="isthisit"] body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.5;
+    z-index: 0;
+}
+
+/* sin scanlines */
+html[data-theme="isthisit"] body::before {
+    display: none;
+}
+
+/* ── tipografía ── */
+html[data-theme="isthisit"] h2 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 1.8rem;
+    color: var(--iti-text);
+    text-shadow: none;
+    letter-spacing: 0.02em;
+}
+
+html[data-theme="isthisit"] a {
+    color: var(--iti-terra);
+    font-weight: normal;
+}
+
+html[data-theme="isthisit"] a:hover {
+    color: var(--iti-text);
+    text-shadow: none;
+}
+
+html[data-theme="isthisit"] li::before {
+    content: '—  ';
+    color: var(--iti-dim);
+}
+
+/* ── cards ── */
+html[data-theme="isthisit"] .profile-card {
+    background: var(--iti-card);
+    border: 0.5px solid var(--iti-border);
+    box-shadow: none;
+}
+
+html[data-theme="isthisit"] .profile-card::before {
+    background: var(--iti-cream);
+    color: var(--iti-dim);
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    border-left: none;
+    padding-left: 6px;
+}
+
+/* ── nav ── */
+html[data-theme="isthisit"] .side-nav-item {
+    color: var(--iti-dim);
+    border-bottom: 0.5px solid var(--iti-border);
+    font-weight: normal;
+}
+
+html[data-theme="isthisit"] .side-nav-item:hover {
+    color: var(--iti-text);
+    text-shadow: none;
+}
+
+html[data-theme="isthisit"] .side-nav-item.active {
+    color: var(--iti-terra);
+    border-left: none;
+    padding-left: 0;
+}
+
+html[data-theme="isthisit"] .side-nav-arrow {
+    color: var(--iti-terra);
+}
+
+/* ── dots de presencia ── */
+html[data-theme="isthisit"] .dot--active {
+    background: var(--iti-terra);
+    box-shadow: none;
+    animation: dot-pulse 2s ease-in-out infinite;
+}
+
+html[data-theme="isthisit"] .dot--inactive {
+    background: var(--iti-border);
+    box-shadow: none;
+}
+
+/* ── typing ── */
+html[data-theme="isthisit"] .typing {
+    color: var(--iti-text);
+    border-right: 1px solid var(--iti-terra);
+    text-shadow: none;
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+@keyframes cursor-iti {
+
+    0%,
+    100% {
+        border-color: var(--iti-terra);
+    }
+
+    50% {
+        border-color: transparent;
+    }
+}
+
+html[data-theme="isthisit"] .typing {
+    animation:
+        typing 1.5s steps(6) forwards,
+        cursor-iti 0.8s step-end 1.5s infinite;
+}
+
+/* ── header stats ── */
+html[data-theme="isthisit"] .header-stats {
+    border-top: 0.5px solid var(--iti-border);
+    color: var(--iti-dim);
+}
+
+html[data-theme="isthisit"] .sep {
+    color: var(--iti-border);
+}
+
+html[data-theme="isthisit"] .dim {
+    color: var(--iti-dim);
+}
+
+/* ── song cover ── */
+html[data-theme="isthisit"] #song-cover {
+    border: 0.5px solid var(--iti-border);
+    filter: sepia(20%) saturate(60%) brightness(1.05);
+}
+
+html[data-theme="isthisit"] #song-cover:hover {
+    filter: sepia(20%) saturate(80%) brightness(1.1);
+}
+
+html[data-theme="isthisit"] #song-title {
+    color: var(--iti-text);
+}
+
+html[data-theme="isthisit"] #song-artist {
+    color: var(--iti-dim);
+}
+
+/* ── card footer ── */
+html[data-theme="isthisit"] .card-footer {
+    border-top: 0.5px solid var(--iti-border);
+}
+
+html[data-theme="isthisit"] .card-footer a {
+    color: var(--iti-dim);
+}
+
+html[data-theme="isthisit"] .card-footer a:hover {
+    color: var(--iti-terra);
+    text-shadow: none;
+}
+
+/* ── left footer ── */
+html[data-theme="isthisit"] .left-footer {
+    border-top: 0.5px solid var(--iti-border);
+    color: var(--iti-dim);
+}
+
+html[data-theme="isthisit"] .heart {
+    color: var(--iti-terra);
+}
+
+/* ── left toggle ── */
+html[data-theme="isthisit"] .left-toggle {
+    border: 0.5px solid var(--iti-border);
+    color: var(--iti-dim);
+}
+
+/* ── scroll indicator ── */
+html[data-theme="isthisit"] .scroll-indicator {
+    color: var(--iti-dim);
+    text-shadow: none;
+}
+
+html[data-theme="isthisit"] .scroll-arrow {
+    color: var(--iti-terra);
+}
+
+/* ── iframe ── */
+html[data-theme="isthisit"] iframe {
+    box-shadow: none;
+    border: 0.5px solid var(--iti-border);
+}
+
+/* ── status cafe ── */
+html[data-theme="isthisit"] #statuscafe {
+    background-color: transparent;
+    color: var(--iti-text);
+}
+
+/* ── weather / presence components ── */
+:global(html[data-theme="isthisit"] .weather-icon) {
+    color: var(--iti-terra);
+}
+
+:global(html[data-theme="isthisit"] .weather-temp) {
+    color: var(--iti-text);
+}
+
+:global(html[data-theme="isthisit"] .weather-desc) {
+    color: var(--iti-dim);
+}
+
+:global(html[data-theme="isthisit"] .presence-label.online) {
+    color: var(--iti-terra);
+}
+
+:global(html[data-theme="isthisit"] .presence-label.offline) {
+    color: var(--iti-dim);
+}
+
+:global(html[data-theme="isthisit"] .presence-since) {
+    color: var(--iti-border);
+}

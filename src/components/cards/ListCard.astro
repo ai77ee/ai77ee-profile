@@ -1,0 +1,25 @@
+---
+interface Props {
+  label: string;
+  items: string[];
+  footerText?: string;
+  footerUrl?: string;
+}
+
+const { label, items, footerText, footerUrl } = Astro.props;
+---
+
+<div class='profile-card more-info' data-label={label}>
+  <ul>
+    {items.map((item) => <li>{item}</li>)}
+  </ul>
+  {
+    footerUrl && footerText && (
+      <div class='card-footer'>
+        <a href={footerUrl} target='_blank' rel='noopener'>
+          {footerText} ↗
+        </a>
+      </div>
+    )
+  }
+</div>

@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/global.css';
+import ListCard from '../components/cards/ListCard.astro';
+import MiniPlayer from '../components/cards/MiniPlayer.astro';
+
+const songs = [
+  {
+    title: 'Going Shopping',
+    artist: 'The Strokes',
+    youtubeId: 'zgaLAliC3-8',
+    image:
+      'https://lastfm.freetls.fastly.net/i/u/300x300/a1263750cddca02ebda0c9717d007679.jpg',
+  },
+  {
+    title: 'Azul',
+    artist: 'Zoé',
+    youtubeId: 'oGWH7C0proI',
+    image:
+      'https://lastfm.freetls.fastly.net/i/u/300x300/ac1f186ca4a3eda3380be80236e8dc7b.png',
+  },
+  {
+    title: 'Joke About Divorce',
+    artist: 'Blossoms',
+    youtubeId: 'olrKfTGTzbc',
+    image:
+      'https://lastfm.freetls.fastly.net/i/u/300x300/5a657cef7b0f3aebd51a21912d3b1d35.png',
+  },
+];
+---
+
+<Base title='favorites'>
+  <ListCard
+    label='FAVORITE ANIME'
+    items={["jojo's bizarre adventure", 'houseki no kuni', 'hibike! euphonium']}
+    footerText='more on anilist'
+    footerUrl='https://anilist.co/user/ai77ee'
+  />
+
+  <ListCard
+    label='FAVORITE BANDS'
+    items={['the strokes', 'arctic monkeys', 'chilli beans.']}
+    footerText='more on last.fm'
+    footerUrl='https://www.last.fm/user/aiimeee'
+  />
+
+  <ListCard
+    label='FAVORITE K-POP ARTISTS'
+    items={[
+      'WJSN',
+      'tripleS',
+      'Yena',
+      'TWICE',
+      'fromis_9',
+      'RESCENE',
+      'KiiiKiii',
+      'IZONE',
+      'LE SSERAFIM',
+    ]}
+  />
+
+  <MiniPlayer songs={songs} />
+</Base>
+
+<style></style>

@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/global.css';
+---
+
+<Base title='skills'>
+  <div class='profile-card skills-card' data-label='SKILLS'>
+    <p class='skills-text'>
+      I'm a self-taught developer with experience in HTML, CSS, JavaScript and
+      React. TypeScript and Astro are my current focus. I also have some
+      experience with Python and SQL.
+    </p>
+  </div>
+
+  <div class='profile-card skills-card' data-label='SETUP'>
+    <p class='skills-text'>
+      Laptop: Lenovo Legion Y530 (i5-8300H, 32GB RAM, GTX 1050ti) <br />
+      OS: Linux Mint 22.3 | Cinnamon <br />
+      Editor: VS Code <br />
+      Terminal: Kitty <br />
+      Browser: Brave <br />
+    </p>
+  </div>
+
+  <div class='profile-card skills-card' data-label='LANGUAGES'>
+    <p class='skills-text'>Spanish (native), English (intermediate)</p>
+  </div>
+
+  <div class='profile-card skills-card' data-label='OTHER SKILLS'>
+    <p class='skills-text'>Not an expert at any of these but:</p>
+    <ul class='skills-list'>
+      <li>networks — protocols, device config, security, troubleshooting</li>
+      <li>guitar — beginner, mostly The Strokes for fun</li>
+      <li>cooking — pasta and easy mexican dishes</li>
+    </ul>
+  </div>
+</Base>
+<style>
+  .skills-text {
+    font-family: var(--font-share-tech-mono), monospace;
+    font-size: 1rem;
+  }
+
+  .skills-list {
+    font-size: 0.95rem;
+    padding-left: 1.5rem;
+  }
+</style>

@@ -1,0 +1,17 @@
+---
+/// <reference types="astro/client" />
+import Base from '../layouts/Base.astro';
+import YoutubePlayer from '../components/cards/YoutubePlayer.astro';
+import '../styles/global.css';
+---
+
+<Base title='home'>
+  <div class='profile-card greeting-card' data-label='WELCOME'>
+    <h2>hi, i'm aimee</h2>
+    <p>
+      「i'm a person who likes music, cats and tech. thanks for stopping by!」
+    </p>
+  </div>
+
+  <YoutubePlayer videoId='6q8UMVXhXsE' title='Baby Flower // tripleS' />
+</Base>

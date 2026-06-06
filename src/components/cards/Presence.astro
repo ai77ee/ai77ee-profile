@@ -1,0 +1,115 @@
+---
+// Presence.astro
+---
+
+<span id='presence-widget' class='presence-widget'>
+  <span class='presence-loading'>syncing...</span>
+</span>
+
+<script>
+  async function fetchPresence() {
+    const widget = document.getElementById('presence-widget');
+    if (!widget) return;
+
+    try {
+      const res = await fetch(
+        'https://presence-worker.pinguinito.workers.dev/status',
+      );
+      const data = await res.json();
+
+      if (data.online) {
+        widget.innerHTML = `
+          <span class="presence-label text">「status: </span>
+          <span class="presence-dot dot--online"></span>
+          <span class="presence-label online">online」</span>
+        `;
+      } else {
+        const lastSeen = formatLastSeen(data.last_seen);
+        widget.innerHTML = `
+          <span class="presence-label text">「status: </span>
+          <span class="presence-dot dot--offline"></span>
+          <span class="presence-label offline">offline</span>
+          <span class="presence-since">· last seen ${lastSeen}」</span>
+        `;
+      }
+    } catch {
+      widget.innerHTML = `<span class="presence-error">err: no signal</span>`;
+    }
+  }
+
+  function formatLastSeen(isoString: string): string {
+    const diff = Date.now() - new Date(isoString).getTime();
+    const mins = Math.floor(diff / 60_000);
+    const hours = Math.floor(diff / 3_600_000);
+    const days = Math.floor(diff / 86_400_000);
+
+    if (mins < 1) return 'just now';
+    if (mins < 60) return `${mins}m ago`;
+    if (hours < 24) return `${hours}h ago`;
+    return `${days}d ago`;
+  }
+
+  fetchPresence();
+</script>
+
+<style>
+  .presence-widget {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* todo lo que se crea con innerHTML necesita :global() */
+  :global(.presence-dot) {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  :global(.dot--online) {
+    background: var(--amber, #ff8c00);
+    box-shadow:
+      0 0 6px rgba(255, 140, 0, 0.9),
+      0 0 14px rgba(255, 140, 0, 0.4);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+
+  :global(.dot--offline) {
+    background: #3a3a3a;
+  }
+
+  :global(.presence-label.online) {
+    color: var(--amber, #ff8c00);
+  }
+  :global(.presence-label.offline) {
+    color: var(--amber-dim, #a35500);
+  }
+  :global(.presence-label.text) {
+    color: var(--amber, #ff8c00);
+  }
+  :global(.presence-since) {
+    color: #5a3200;
+    font-size: 0.6rem;
+  }
+  :global(.presence-error),
+  :global(.presence-loading) {
+    color: #5a3200;
+    font-size: 0.6rem;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 0.5;
+      transform: scale(0.85);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+</style>

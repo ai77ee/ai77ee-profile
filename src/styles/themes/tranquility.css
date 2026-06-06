@@ -1,0 +1,199 @@
+/* ═══════════════════════════════════════════
+   THEME: TRANQUILITY BASE HOTEL + CASINO
+   Arctic Monkeys (2018)
+   Paleta: negro espacial, crema, dorado apagado
+   Tipografía: elegante, espaciada, minimal
+   ═══════════════════════════════════════════ */
+
+:root {
+    /* colores principales */
+    --amber: #c8b090;
+    /* crema/beige cálido */
+    --amber-dim: #7a6545;
+    /* dorado apagado */
+    --amber-bright: #e8d5b0;
+    /* crema claro */
+    --amber-glow: rgba(200, 176, 144, 0.1);
+    --amber-faint: rgba(200, 176, 144, 0.04);
+    --bg: #050403;
+    /* negro casi puro con tono cálido */
+
+    /* colores extra del álbum */
+    --tbhc-gold: #a08040;
+    --tbhc-cream: #d4c4a0;
+    --tbhc-muted: #3a3028;
+}
+[data-theme="tranquility"] {
+    --amber: #c8b090;
+}
+
+/* después */
+html[data-theme="tranquility"] {
+    --amber: #c8b090;
+    --amber-dim: #7a6545;
+    --amber-bright: #e8d5b0;
+    --amber-glow: rgba(200, 176, 144, 0.1);
+    --amber-faint: rgba(200, 176, 144, 0.04);
+    --bg: #050403;
+}
+[data-theme="tranquility"] body {
+    background-color: var(--bg);
+    /* gradiente radial sutil como la oscuridad del espacio */
+    background-image:
+        radial-gradient(ellipse at 30% 20%, rgba(50, 35, 15, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 80%, rgba(30, 20, 8, 0.3) 0%, transparent 60%),
+        radial-gradient(rgba(200, 176, 144, 0.06) 1px, transparent 1px);
+    background-size: auto, auto, 24px 24px;
+    color: var(--amber);
+    
+    letter-spacing: 0.08em;
+    /* más espaciado = más elegante */
+}
+
+/* scanlines muy sutiles — casi imperceptibles */
+[data-theme="tranquility"] body::before {
+    background: repeating-linear-gradient(0deg,
+            transparent,
+            transparent 3px,
+            rgba(0, 0, 0, 0.06) 3px,
+            rgba(0, 0, 0, 0.06) 4px);
+    animation: none;
+    /* sin animación = más estático, más elegante */
+}
+
+/* tipografía — más espaciada, menos gritona */
+[data-theme="tranquility"] h2 {
+    font-family: var(--font-tranquility), monospace;
+    font-weight: 100;
+    font-style: normal;
+    text-transform:uppercase;
+    /* sin italic — más sobrio */
+    font-size: 1.8rem;
+    color: var(--tbhc-cream);
+    letter-spacing: 0em;
+    /* más espaciado */
+    text-shadow:
+        0 0 30px rgba(200, 176, 144, 0.2);
+    /* glow muy sutil */
+}
+
+[data-theme="tranquility"] a {
+    color: var(--amber);
+    font-weight: normal;
+    /* menos bold que el tema ámbar */
+}
+
+[data-theme="tranquility"] a:hover {
+    color: var(--tbhc-cream);
+    text-shadow: 0 0 8px rgba(200, 176, 144, 0.4);
+}
+
+[data-theme="tranquility"] li::before {
+    content: '—  ';
+    /* dash elegante en vez de ▸ */
+    color: var(--tbhc-gold);
+}
+
+/* cards — más sutiles, menos borde */
+[data-theme="tranquility"] .profile-card {
+    background: rgba(8, 6, 3, 0.95);
+    border: 1px solid var(--tbhc-muted);
+    box-shadow:
+        0 0 20px rgba(0, 0, 0, 0.5),
+        inset 0 0 30px rgba(160, 128, 64, 0.03);
+}
+
+/* etiqueta de card — más pequeña y discreta */
+[data-theme="tranquility"] .profile-card::before {
+    background: var(--bg);
+    color: var(--tbhc-gold);
+    font-size: 0.55rem;
+    letter-spacing: 0.35em;
+}
+
+/* card footer */
+[data-theme="tranquility"] .card-footer {
+    border-top: 1px solid var(--tbhc-muted);
+}
+
+[data-theme="tranquility"] .card-footer a {
+    color: var(--tbhc-gold);
+    letter-spacing: 0.2em;
+}
+
+/* nav lateral — más minimal */
+[data-theme="tranquility"] .side-nav-item {
+    letter-spacing: 0.15em;
+    font-size: 0.68rem;
+}
+
+[data-theme="tranquility"] .side-nav-item.active {
+    color: var(--tbhc-cream);
+    letter-spacing: 0.2em;
+}
+
+[data-theme="tranquility"] .side-nav-arrow {
+    color: var(--tbhc-gold);
+}
+
+/* dot de presencia — dorado en vez de ámbar */
+[data-theme="tranquility"] .dot--active {
+    background: var(--tbhc-gold);
+    box-shadow:
+        0 0 6px rgba(160, 128, 64, 0.7),
+        0 0 14px rgba(160, 128, 64, 0.3);
+    animation: dot-pulse 2s ease-in-out infinite;
+    /* más lento = más calmado */
+}
+
+/* typing — cursor más sutil */
+[data-theme="tranquility"] .typing {
+    border-right: 1px solid var(--tbhc-cream);
+    /* más delgado */
+}
+
+/* header stats */
+[data-theme="tranquility"] .header-stats {
+    letter-spacing: 0.15em;
+    font-size: 0.65rem;
+    gap: 8px 24px;
+}
+
+[data-theme="tranquility"] .sep {
+    color: var(--tbhc-muted);
+}
+
+/* song cover — tinte diferente, más frío */
+[data-theme="tranquility"] #song-cover {
+    filter: sepia(40%) saturate(80%) brightness(0.85);
+}
+[data-theme="tranquility"] #song-cover:hover {
+    filter: sepia(60%) saturate(100%) hue-rotate(-20deg) brightness(1.1) drop-shadow(0 0 6px rgba(212, 199, 182, 0.8));
+    transition: filter 0.3s ease;
+}
+/* footer */
+[data-theme="tranquility"] .heart {
+    color: var(--tbhc-gold);
+}
+
+/* scroll indicator */
+[data-theme="tranquility"] .scroll-indicator {
+    color: var(--tbhc-gold);
+    letter-spacing: 0.2em;
+}
+
+[data-theme="tranquility"] .scroll-arrow {
+    color: var(--tbhc-cream);
+}
+
+/* profile card label más discreta */
+[data-theme="tranquility"] .profile-card::before {
+    font-size: 0.5rem;
+    letter-spacing: 0.4em;
+    color: var(--tbhc-gold);
+}
+
+/* dot grid más sutil */
+[data-theme="tranquility"] body {
+    background-size: auto, auto, 28px 28px;
+}

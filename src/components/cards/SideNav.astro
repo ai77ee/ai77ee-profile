@@ -1,0 +1,125 @@
+---
+const pathname = Astro.url.pathname;
+
+const links = [
+  { href: '/home', label: 'home' },
+  { href: '/favorites', label: 'favorites' },
+  { href: '/obsessions', label: 'obsessions' },
+  { href: '/skills', label: 'skills' },
+  { href: '/projects', label: 'projects' },
+];
+---
+
+<nav class='side-nav profile-card' data-label='NAVIGATION'>
+  <!-- botón solo visible en móvil -->
+  <button class='side-nav-toggle'>
+    <span class='toggle-text'>▸ expand menu</span>
+    <span class='toggle-icon'>[+]</span>
+  </button>
+
+  <!-- wrapper que se muestra/oculta en móvil -->
+  <div class='side-nav-links'>
+    {
+      links.map((link) => (
+        <a href={link.href} class='side-nav-item' data-href={link.href}>
+          <span class='side-nav-arrow' />
+          {link.label}
+        </a>
+      ))
+    }
+  </div>
+</nav>
+<script>
+  const toggle = document.querySelector('.side-nav-toggle');
+  const linksElement = document.querySelector('.side-nav-links');
+
+  toggle?.addEventListener('click', () => {
+    linksElement?.classList.toggle('open');
+    const toggleIcon = toggle.querySelector('.toggle-icon');
+    if (toggleIcon) {
+      toggleIcon.textContent = linksElement?.classList.contains('open')
+        ? '[-]'
+        : '[+]';
+    }
+  });
+
+  function setActiveLink() {
+    const pathname = window.location.pathname;
+    document.querySelectorAll('.side-nav-item').forEach((link) => {
+      const isActive = link.getAttribute('data-href') === pathname;
+      link.classList.toggle('active', isActive);
+    });
+  }
+  // closes or retracts the menu
+  linksElement?.querySelectorAll('.side-nav-item').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (!linksElement) return;
+      linksElement.classList.remove('open');
+      const icon = toggle?.querySelector('.toggle-icon');
+      if (icon) icon.textContent = '[+]';
+    });
+  });
+
+  setActiveLink();
+  document.addEventListener('astro:page-load', setActiveLink);
+</script>
+
+<style>
+  .toggle-text,
+  .side-nav-item {
+    font-size: 0.95rem;
+  }
+  .side-nav-arrow {
+    display: inline-block;
+    width: 1em;
+  }
+  .side-nav-item.active .side-nav-arrow::before {
+    content: '▸';
+  }
+  /* móvil: convertir en desplegable */
+  @media (max-width: 768px) {
+    .side-nav {
+      padding: 4px;
+    }
+
+    .side-nav-links {
+      display: none; /* oculto por defecto */
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 3px;
+      padding-top: 4px;
+      border-top: 1px solid var(--amber-dim);
+    }
+
+    .side-nav-links.open {
+      display: flex; /* visible al abrir */
+    }
+
+    .side-nav-toggle {
+      display: flex; /* botón solo en móvil */
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--amber);
+      font-family: var(--font-share-tech-mono), monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+  }
+
+  /* desktop: siempre visible, toggle oculto */
+  @media (min-width: 769px) {
+    .side-nav-toggle {
+      display: none;
+    }
+    .side-nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+  }
+</style>
