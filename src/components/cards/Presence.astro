@@ -12,9 +12,7 @@
     if (!widget) return;
 
     try {
-      const res = await fetch(
-        'https://presence-worker.pinguinito.workers.dev/status',
-      );
+      const res = await fetch('https://presence.ai77ee.xyz/status');
       const data = await res.json();
 
       if (data.online) {
