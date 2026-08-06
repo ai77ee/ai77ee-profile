@@ -1,0 +1,133 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/global.css';
+---
+
+<Base title='cats'>
+  <div class='profile-card cats' data-label='MEET MY CATS'>
+    <div class='cats-content'>
+      <p class='cats-text'>
+        i love my cats!!!<br />
+        their names are <b>Nito</b> and <b>Mimishi</b>;<br />
+        Nito being the tuxedo and Mimishi being the orange tabby, both are 10 years
+        old.<br /><br />
+
+        they don’t get along very well, it's like they are frenemies lol.<br
+        /><br />
+
+        <b>Nito</b> is grumpy but has a soft side. his favorite things are eating,
+        sleeping and biting as a form of affection (or aggression lmfao). he’s well
+        known in the neighborhood. he is very smart and gets what he wants. the thing
+        he hates the most is his tail being touched. also he doesn’t like being picked
+        up or hugged very much.<br /><br />
+
+        <b>Mimishi</b> is a cutie pie but has an evil side lol. he likes to be around
+        nature and sniffs everything. his favorite activity is rolling around looking
+        for pets. he also likes rubbing against you and giving headbutts. he’s really
+        a scaredy-cat haha. he doesn’t like loud noises or strangers. the thing he
+        hates the most is water… and Nito.
+      </p>
+    </div>
+  </div>
+
+  <div class='profile-card gallery' data-label='CAT GALLERY'>
+    <div class='cat-gallery'>
+      <div class='cat-card'>
+        <img src='/cats/nito1.jpg' alt='Nito' loading='lazy' />
+        <p>nito being a handsome boy</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/nito2.jpg' alt='Nito' loading='lazy' />
+        <p>chillin on the sofa</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/nito4.jpg' alt='Nito' loading='lazy' />
+        <p>you always see the sky</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/nito5.jpg' alt='Nito' loading='lazy' />
+        <p>so cute</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/nito6.jpg' alt='Nito' loading='lazy' />
+        <p>insane face card</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/nito8.jpg' alt='Nito' loading='lazy' />
+        <p>sleeping</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/nito9.jpg' alt='Nito' loading='lazy' />
+        <p>eepy boy</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/nito10.jpg' alt='Nito' loading='lazy' />
+        <p>employee of the month</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/mimi1.jpg' alt='Mimishi' loading='lazy' />
+        <p>silly boy</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/mimi4.jpg' alt='Mimishi' loading='lazy' />
+        <p>sun kissed</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/mimi5.jpg' alt='Mimishi' loading='lazy' />
+        <p>why so cute</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/mimi6.jpg' alt='Mimishi' loading='lazy' />
+        <p>zzzzz</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/mimi7.jpg' alt='Mimishi' loading='lazy' />
+        <p>tongue out</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/mimi8.jpg' alt='Mimishi' loading='lazy' />
+        <p>pretty boy</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/mimi9.jpg' alt='Mimishi' loading='lazy' />
+        <p>a selfie</p>
+      </div>
+      <div class='cat-card'>
+        <img src='/cats/mimi10.jpg' alt='Mimishi' loading='lazy' />
+        <p>what's that?</p>
+      </div>
+    </div>
+  </div>
+  <style>
+    .cat-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .cat-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .cat-card img {
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--amber-dim);
+      object-fit: cover;
+    }
+
+    @media (max-width: 600px) {
+      .cat-gallery {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+      }
+      .cats-text {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</Base>
