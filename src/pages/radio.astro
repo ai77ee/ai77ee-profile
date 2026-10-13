@@ -1,0 +1,183 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title='radio'>
+  <div class='profile-card radio-card' data-label='radio'>
+    <p class='radio-text'>
+      Every now and then, I stream whatever I'm listening to... when I remember
+      LOL If I'm live, feel free to tune in and hang out.
+    </p>
+    <div
+      data-type='newStreamPlayer'
+      data-publicToken='9a08c74d-cea8-42a0-9809-be1424126f46'
+      data-theme='light'
+      data-color='B5452A'
+      data-channelId='a2f61511-7e4a-456d-b897-b8844dfb0a6b'
+      data-rendered='false'
+      class='cstrEmbed radio-player'
+    >
+      <a href='https://www.caster.fm'>Shoutcast Hosting</a>
+      <a href='https://www.caster.fm'>Stream Hosting</a>
+      <a href='https://www.caster.fm'>Radio Server Hosting</a>
+    </div>
+  </div>
+  <div class='profile-card radio-card' data-label='chat'>
+    <ws-widget
+      class='radio-chat'
+      type='chat'
+      iid='4859'
+      name='radio chat'
+      width='100%'
+      height='320px'
+    ></ws-widget>
+  </div>
+</Base>
+
+<script>
+  function syncChatTheme() {
+    const chat = document.querySelector<HTMLElement>('.radio-chat');
+    const card = chat?.closest<HTMLElement>('.profile-card');
+    if (!chat || !card) return;
+
+    const rootStyle = getComputedStyle(document.documentElement);
+    const cardStyle = getComputedStyle(card);
+    const text = getComputedStyle(document.body).color;
+
+    // WidgetStar usa RGB/RGBA; las variables del sitio también contienen hex.
+    function color(variable: string) {
+      const value = rootStyle.getPropertyValue(variable).trim();
+      if (!/^#[\da-f]{6}$/i.test(value)) return value;
+
+      const channels = value.slice(1).match(/.{2}/g)!.map((hex) => parseInt(hex, 16));
+      return `rgb(${channels.join(', ')})`;
+    }
+
+    const accent = color('--amber');
+    const bright = color('--amber-bright');
+    const muted = color('--amber-dim');
+    const settings = {
+      font_family: 'Courier New, monospace',
+      font_size: 14,
+      accent_color: accent,
+      name_color: accent,
+      background_color: cardStyle.backgroundColor,
+      text_color: text,
+      muted_color: muted,
+      bubble_color: cardStyle.backgroundColor,
+      input_color: color('--bg'),
+      border_color: cardStyle.borderTopColor,
+      button_border_color: accent,
+      user_name_color: text,
+      user_icon_color: accent,
+      mod_name_color: bright,
+      mod_icon_color: bright,
+      admin_name_color: accent,
+      admin_icon_color: accent,
+      discord_name_color: muted,
+      discord_icon_color: muted,
+    };
+
+    // El atributo observado hace que WidgetStar recargue el iframe con la paleta.
+    const encodedSettings = encodeURIComponent(JSON.stringify(settings));
+    if (chat.getAttribute('settings') !== encodedSettings) {
+      chat.setAttribute('settings', encodedSettings);
+    }
+  }
+
+  function syncRadioTheme() {
+    const player = document.querySelector<HTMLElement>('.radio-player');
+    if (!player) return;
+
+    const root = document.documentElement;
+    const theme =
+      root.getAttribute('data-theme') === 'isthisit' ? 'light' : 'dark';
+    const accent = getComputedStyle(root).getPropertyValue('--amber').trim();
+    const color = /^#[\da-f]{6}$/i.test(accent) ? accent.slice(1) : 'B5452A';
+
+    player.setAttribute('data-theme', theme);
+    player.setAttribute('data-color', color);
+
+    // Caster.fm lee estas opciones al cargar el iframe, no al cambiar atributos.
+    const iframe = player.querySelector('iframe');
+    if (!iframe) return;
+
+    const url = new URL(iframe.src);
+    if (
+      url.searchParams.get('theme') === theme &&
+      url.searchParams.get('color')?.toLowerCase() === color.toLowerCase()
+    )
+      return;
+
+    url.searchParams.set('theme', theme);
+    url.searchParams.set('color', color);
+    iframe.src = url.toString();
+    iframe.title = 'ai77ee radio';
+  }
+
+  function syncWidgetsTheme() {
+    syncRadioTheme();
+    syncChatTheme();
+  }
+
+  function initRadio() {
+    if (!document.querySelector('.radio-player')) return;
+    syncWidgetsTheme();
+
+    // El script externo se ejecuta una vez; las rutas de Astro necesitan un rescan.
+    const casterWindow = window as Window & {
+      casterfmWidgetsRescan?: () => void;
+    };
+    casterWindow.casterfmWidgetsRescan?.();
+
+    const iframe = document.querySelector<HTMLIFrameElement>(
+      '.radio-player iframe',
+    );
+    if (iframe) iframe.title = 'ai77ee radio';
+  }
+
+  const themeObserver = new MutationObserver(syncWidgetsTheme);
+  themeObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+
+  initRadio();
+  document.addEventListener('astro:page-load', initRadio);
+</script>
+
+<style>
+  .radio-text {
+    font-size: 1rem;
+    font-family: var(--font-fira-mono), sans-serif;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+  }
+
+  .radio-card {
+    min-width: 0;
+    padding: 16px 12px;
+  }
+
+  .radio-player {
+    width: 100%;
+  }
+
+  .radio-player :global(iframe) {
+    display: block;
+    width: 100%;
+    box-shadow: none;
+  }
+
+  .radio-chat {
+    display: block;
+    width: 100%;
+    height: 320px;
+  }
+
+  .radio-chat :global(iframe) {
+    display: block;
+    border: 0;
+    box-shadow: none;
+  }
+</style>

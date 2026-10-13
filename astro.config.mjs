@@ -21,6 +21,17 @@ export default defineConfig({
       name: 'Share Tech Mono',
       cssVariable: '--font-share-tech-mono',
       provider: fontProviders.fontsource(),
+      // Specify weights that are actually used ibm-plex-sans
+      weights: [400],
+      // Specify styles that are actually used
+      styles: ['normal'],
+      // Download more font formats
+      formats: ['woff2', 'woff'],
+    },
+    {
+      name: 'Fira Mono',
+      cssVariable: '--font-fira-mono',
+      provider: fontProviders.fontsource(),
       // Specify weights that are actually used
       weights: [400],
       // Specify styles that are actually used

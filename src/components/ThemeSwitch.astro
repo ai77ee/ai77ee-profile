@@ -40,7 +40,7 @@ const themes = [
   }
 
   function initTheme() {
-    const saved = (localStorage.getItem('theme') || 'amber') as Theme;
+    const saved = (localStorage.getItem('theme') || 'isthisit') as Theme;
     document.documentElement.setAttribute('data-theme', saved);
     updateButtons(saved);
     updateMoodImg(saved);
@@ -53,7 +53,8 @@ const themes = [
       btn.replaceWith(newBtn);
 
       newBtn.addEventListener('click', () => {
-        const theme = (newBtn.getAttribute('data-theme') || 'amber') as Theme;
+        const theme = (newBtn.getAttribute('data-theme') ||
+          'isthisit') as Theme;
         localStorage.setItem('theme', theme);
         document.documentElement.setAttribute('data-theme', theme);
         updateButtons(theme);

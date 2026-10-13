@@ -24,7 +24,7 @@ const { title = 'ai77ee' } = Astro.props;
   <head>
     <!-- tema -->
     <script is:inline>
-      const theme = localStorage.getItem('theme') || 'amber';
+      const theme = localStorage.getItem('theme') || 'isthisit';
       document.documentElement.setAttribute('data-theme', theme);
     </script>
     <meta charset='UTF-8' />
@@ -51,6 +51,7 @@ const { title = 'ai77ee' } = Astro.props;
 
     <Font cssVariable='--font-jersey-25' preload />
     <Font cssVariable='--font-share-tech-mono' preload />
+    <Font cssVariable='--font-fira-mono' preload />
     <Font cssVariable={'--font-tranquility' as any} />
     <ClientRouter />
 
@@ -58,6 +59,8 @@ const { title = 'ai77ee' } = Astro.props;
       defer
       src='https://cloud.umami.is/script.js'
       data-website-id='0c466754-c443-47b0-9d18-7e947dec24ca'></script>
+    <script src='https://cdn.cloud.caster.fm//widgets/embed.js'></script>
+    <script src='https://u.widget.st/ar.js'></script>
   </head>
   <body>
     <div class='profile-grid'>
